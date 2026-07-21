@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SecurityQFill — Fill security questionnaires in 5 minutes</title>
-  <meta name="description" content="Upload your security questionnaire and policies. AI fills every answer with citations from your own documents. Available as a web app and Chrome extension. No subscription.">
+  <title>SecurityQFill — Answer enterprise security questionnaires with facts, not guesswork</title>
+  <meta name="description" content="Connect GitHub, verify your real security posture, and fill enterprise security questionnaires with grounded answers and source citations. It refuses to make up answers — gaps get honest templates plus a remediation plan. BYOK: your code and questionnaire never touch our servers. $49/fill, no subscription.">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -17,6 +17,8 @@
       --accent:      #0d7a3e;
       --accent-soft: #e8f5ec;
       --accent-dim:  #0a5c2e;
+      --amber:       #b45309;
+      --amber-soft:  #fdf3e7;
       --text:        #1a1a1a;
       --text-muted:  #5c5c5c;
       --text-subtle: #8a8a8a;
@@ -26,6 +28,28 @@
       --shadow-sm:   0 1px 2px rgba(0,0,0,0.04);
       --shadow:      0 4px 20px rgba(0,0,0,0.06);
       --shadow-lg:   0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:          #0f1210;
+        --surface:     #171a18;
+        --surface-warm:#1b1f1c;
+        --border:      #2b302c;
+        --border-light:#23271f;
+        --accent:      #3fb950;
+        --accent-soft: #16241a;
+        --accent-dim:  #2ea043;
+        --amber:       #e3a008;
+        --amber-soft:  #2a2113;
+        --text:        #e6edf3;
+        --text-muted:  #a9b2ac;
+        --text-subtle: #7d867f;
+        --text-light:  #5a625b;
+        --shadow-sm:   0 1px 2px rgba(0,0,0,0.3);
+        --shadow:      0 4px 20px rgba(0,0,0,0.4);
+        --shadow-lg:   0 12px 40px rgba(0,0,0,0.5);
+      }
     }
 
     html { font-size: 16px; scroll-behavior: smooth; }
@@ -39,7 +63,7 @@
 
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
     section { padding: 72px 0; }
     section + section { border-top: 1px solid var(--border-light); }
 
@@ -47,7 +71,7 @@
     nav {
       padding: 20px 0;
       position: sticky; top: 0;
-      background: rgba(250,250,250,0.92);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 100;
@@ -75,12 +99,13 @@
     h1 {
       font-size: clamp(2.2rem, 5.5vw, 3.2rem); font-weight: 800;
       line-height: 1.1; letter-spacing: -0.03em;
-      color: var(--text); margin-bottom: 20px; max-width: 600px;
+      color: var(--text); margin-bottom: 20px; max-width: 640px;
     }
     .sub-headline {
       font-size: 1.15rem; color: var(--text-muted);
-      line-height: 1.65; margin-bottom: 40px; max-width: 540px;
+      line-height: 1.65; margin-bottom: 40px; max-width: 580px;
     }
+    .sub-headline strong { color: var(--text); font-weight: 600; }
 
     /* Real output screenshot */
     .screenshot-wrap {
@@ -96,50 +121,9 @@
       display: block;
     }
     .screenshot-caption {
-      font-size: 0.78rem; color: var(--text-light); text-align: center; margin-top: 10px;
+      font-size: 0.78rem; color: var(--text-light); text-align: center; margin-top: 12px;
+      line-height: 1.5; max-width: 560px; margin-left: auto; margin-right: auto;
     }
-
-    /* Mockup */
-    .mockup-wrap {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 32px;
-      box-shadow: var(--shadow); margin-bottom: 48px;
-    }
-    .mockup-label {
-      font-size: 0.85rem; font-weight: 600; color: var(--text-subtle);
-      margin-bottom: 20px; text-align: center; letter-spacing: 0.02em;
-    }
-    .mockup { display: flex; align-items: stretch; gap: 16px; }
-    .mock-card { flex: 1 1 0; min-width: 0; border-radius: var(--radius); padding: 20px 22px; }
-    .mock-card.before { background: var(--surface-warm); border: 1px dashed var(--border); }
-    .mock-card.after { background: var(--accent-soft); border: 1px solid #c8e6d0; }
-    .mock-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text-subtle); margin-bottom: 16px;
-    }
-    .mock-card.after .mock-tag { color: var(--accent); }
-    .mock-conf {
-      font-size: 0.7rem; font-weight: 700; color: var(--accent);
-      background: #fff; padding: 3px 10px; border-radius: 100px;
-    }
-    .mock-field { margin-bottom: 12px; }
-    .mock-field:last-child { margin-bottom: 0; }
-    .mock-field .k {
-      display: block; font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-subtle); margin-bottom: 4px;
-    }
-    .mock-field .v { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
-    .mock-blank { color: var(--text-light); font-style: italic; }
-    .mock-card.after .mock-cite .v { color: var(--accent); font-size: 0.8rem; font-weight: 500; }
-    .mock-arrow {
-      flex: 0 0 auto; align-self: center;
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      color: var(--text-subtle); font-size: 0.7rem; font-weight: 700;
-      letter-spacing: 0.04em; white-space: nowrap;
-    }
-    .mock-arrow .glyph { font-size: 1.4rem; line-height: 1; color: var(--accent); }
 
     /* Pain */
     .pain-block {
@@ -174,32 +158,37 @@
     .btn-primary:active { transform: scale(0.98); }
     .cta-microcopy { font-size: 0.82rem; color: var(--text-subtle); margin-top: 14px; line-height: 1.5; }
 
-    /* How it works */
+    /* Section headers */
     h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
-    .section-sub { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; }
-    .paths-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .path-card {
+    .section-sub { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; max-width: 600px; }
+
+    /* Flow steps (how it works) */
+    .flow { display: flex; flex-direction: column; gap: 14px; }
+    .flow-step {
+      display: flex; gap: 20px; align-items: flex-start;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 28px;
+      border-radius: var(--radius-lg); padding: 24px 26px;
       transition: box-shadow 0.2s, border-color 0.2s;
     }
-    .path-card:hover { border-color: #c8e6d0; box-shadow: var(--shadow); }
-    .path-card-label {
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
-    }
-    .path-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 18px; }
-    .path-steps { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-    .path-steps li { display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
-    .path-step-num {
-      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    .flow-step:hover { border-color: #c8e6d0; box-shadow: var(--shadow); }
+    .flow-num {
+      flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%;
       background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700; color: var(--accent); margin-top: 1px;
+      font-size: 1rem; font-weight: 800; color: var(--accent);
+    }
+    .flow-body h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .flow-body p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; }
+    .flow-body p .hl { color: var(--text); font-weight: 600; }
+    .flow-note {
+      font-size: 0.85rem; color: var(--text-subtle); margin-top: 20px;
+      padding: 14px 18px; background: var(--surface-warm); border-radius: var(--radius);
+      border: 1px dashed var(--border); line-height: 1.6;
     }
 
     /* Value grid */
     .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .value-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .value-card.span-2 { grid-column: 1 / -1; }
     .value-card .value-icon {
       width: 36px; height: 36px; border-radius: 10px; background: var(--accent-soft);
       display: flex; align-items: center; justify-content: center;
@@ -207,6 +196,28 @@
     }
     .value-card strong { display: block; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
     .value-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; }
+    .value-card p + p { margin-top: 8px; }
+
+    /* Grounded / gap demo */
+    .demo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+    .demo-card { border-radius: var(--radius-lg); padding: 22px 24px; border: 1px solid var(--border); background: var(--surface); }
+    .demo-card .demo-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-subtle); margin-bottom: 14px;
+    }
+    .demo-card .badge {
+      font-size: 0.66rem; font-weight: 700; padding: 3px 10px; border-radius: 100px;
+    }
+    .demo-card.grounded { border-color: #c8e6d0; }
+    .demo-card.grounded .badge { color: var(--accent); background: var(--accent-soft); }
+    .demo-card.gap .badge { color: var(--amber); background: var(--amber-soft); }
+    .demo-q { font-size: 0.82rem; color: var(--text-subtle); margin-bottom: 8px; }
+    .demo-q strong { color: var(--text); font-weight: 600; }
+    .demo-a { font-size: 0.9rem; color: var(--text); line-height: 1.55; margin-bottom: 12px; }
+    .demo-cite { font-size: 0.76rem; line-height: 1.5; }
+    .demo-card.grounded .demo-cite { color: var(--accent); font-weight: 500; }
+    .demo-card.gap .demo-cite { color: var(--amber); font-weight: 500; }
 
     /* Pricing */
     .pricing-hero { text-align: center; margin-bottom: 40px; }
@@ -225,21 +236,18 @@
     }
     .comparison-row:last-child { border-bottom: none; }
     .comparison-row.highlight { background: var(--accent-soft); }
-    .comparison-row .comp-option { flex: 1; font-weight: 600; color: var(--text); }
-    .comparison-row .comp-option small { display: block; font-weight: 400; font-size: 0.78rem; color: var(--text-subtle); margin-top: 2px; }
+    .comparison-row .comp-option { flex: 1; font-weight: 600; color: var(--text); padding-right: 12px; }
+    .comparison-row .comp-option small { display: block; font-weight: 400; font-size: 0.78rem; color: var(--text-subtle); margin-top: 3px; line-height: 1.45; }
     .comparison-row.highlight .comp-option small { color: var(--accent-dim); }
-    .comparison-row .comp-cost { width: 120px; text-align: right; color: var(--text-muted); }
-    .comparison-row .comp-time { width: 140px; text-align: right; color: var(--text-muted); }
-    .comparison-row.highlight .comp-cost,
-    .comparison-row.highlight .comp-time { color: var(--accent); font-weight: 700; }
+    .comparison-row .comp-cost { width: 130px; text-align: right; color: var(--text-muted); }
+    .comparison-row.highlight .comp-cost { color: var(--accent); font-weight: 700; }
     .comparison-header {
       display: flex; padding: 12px 24px;
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--text-subtle); background: var(--surface-warm); border-bottom: 1px solid var(--border-light);
     }
     .comparison-header span:first-child { flex: 1; }
-    .comparison-header span:nth-child(2) { width: 120px; text-align: right; }
-    .comparison-header span:nth-child(3) { width: 140px; text-align: right; }
+    .comparison-header span:nth-child(2) { width: 130px; text-align: right; }
 
     /* Trust */
     .trust-box {
@@ -252,6 +260,7 @@
     }
     .trust-box h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
     .trust-box p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; }
+    .trust-box p + p { margin-top: 10px; }
 
     /* Founder */
     .founder-section {
@@ -284,7 +293,7 @@
       border-radius: var(--radius-lg); padding: 48px 40px; text-align: center; box-shadow: var(--shadow-lg);
     }
     .bottom-cta h2 { font-size: 1.6rem; margin-bottom: 12px; }
-    .bottom-cta > p { color: var(--text-muted); font-size: 1rem; margin-bottom: 28px; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .bottom-cta > p { color: var(--text-muted); font-size: 1rem; margin-bottom: 28px; max-width: 460px; margin-left: auto; margin-right: auto; }
 
     /* Footer */
     footer { border-top: 1px solid var(--border-light); padding: 40px 0; }
@@ -300,16 +309,15 @@
       h1 { font-size: 2rem; }
       .form-row { flex-direction: column; }
       .form-row input[type="email"], .btn-primary { width: 100%; }
-      .paths-grid, .value-grid { grid-template-columns: 1fr; }
-      .mockup { flex-direction: column; }
-      .mock-arrow { flex-direction: row; }
-      .mock-arrow .glyph { transform: rotate(90deg); }
+      .value-grid { grid-template-columns: 1fr; }
+      .demo-pair { grid-template-columns: 1fr; }
+      .flow-step { gap: 14px; padding: 20px; }
       .trust-box { flex-direction: column; }
       .founder-section { padding: 28px 24px; }
       .bottom-cta { padding: 32px 24px; }
       footer .container { flex-direction: column; align-items: flex-start; }
       .comparison-row { flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 20px; }
-      .comparison-row .comp-cost, .comparison-row .comp-time { width: auto; text-align: left; }
+      .comparison-row .comp-cost { width: auto; text-align: left; }
       .comparison-header { display: none; }
     }
   </style>
@@ -326,38 +334,17 @@
 <section class="hero" id="top">
   <div class="container">
     <span class="hero-eyebrow">Early Access</span>
-    <h1>Fill your security questionnaire in 5 minutes, not 5 hours.</h1>
-    <p class="sub-headline">Upload your questionnaire and your security policies. AI fills every answer with citations from your own documents. No subscription.</p>
+    <h1>Answer your enterprise security questionnaire with facts, not guesswork.</h1>
+    <p class="sub-headline">SecurityQFill scans your GitHub and infrastructure to verify what your security posture actually is, then fills the questionnaire from those facts &#8212; with a source citation on every answer. <strong>It refuses to make up an answer it can&#8217;t back up.</strong> Built for pre-SOC2 B2B SaaS founders. No subscription.</p>
 
     <div class="screenshot-wrap">
-      <p class="screenshot-label">Real output — 8 questions filled in under 30 seconds</p>
-      <img class="screenshot-img" src="poc-results.png" alt="SecurityQFill results table: 8 security questionnaire rows filled with answers, policy citations, and HIGH confidence badges">
-      <p class="screenshot-caption">Demo mode · Acme Corp Security Policy v2.1 · All 8 rows HIGH confidence</p>
-    </div>
-
-    <div class="mockup-wrap">
-      <p class="mockup-label">Here&#8217;s what it does to every row</p>
-      <div class="mockup">
-        <div class="mock-card before">
-          <div class="mock-head"><span class="mock-tag">Before</span></div>
-          <div class="mock-field"><span class="k">Question</span><span class="v">Do you encrypt customer data at rest?</span></div>
-          <div class="mock-field"><span class="k">Answer</span><span class="v"><span class="mock-blank">[ blank ]</span></span></div>
-        </div>
-        <div class="mock-arrow" aria-hidden="true">
-          <span class="glyph">&#8594;</span>
-          <span>SecurityQFill</span>
-        </div>
-        <div class="mock-card after">
-          <div class="mock-head"><span class="mock-tag">After</span><span class="mock-conf">&#10003; High confidence</span></div>
-          <div class="mock-field"><span class="k">Question</span><span class="v">Do you encrypt customer data at rest?</span></div>
-          <div class="mock-field"><span class="k">Answer</span><span class="v">Yes. All customer data is encrypted at rest using AES-256 and in transit using TLS 1.3.</span></div>
-          <div class="mock-field mock-cite"><span class="k">Citation</span><span class="v">Security Policy.pdf &#8212; Section 4.2</span></div>
-        </div>
-      </div>
+      <p class="screenshot-label">Grounded answers with source citations</p>
+      <img class="screenshot-img" src="poc-results.png" alt="SecurityQFill results table: security questionnaire rows filled with grounded answers, source citations, and confidence badges">
+      <p class="screenshot-caption">Demo mode: 8 questions with direct policy matches. Real questionnaires typically include questions the product flags as honest gaps &#8212; that&#8217;s the product working correctly, not failing.</p>
     </div>
 
     <div class="pain-block">
-      <p><strong>You shouldn&#8217;t spend your weekend on a process that adds zero value to your product.</strong> Security questionnaires are a tax on closing enterprise deals. Most have 80&#8211;200 rows. Filling them manually takes 4&#8211;8 hours of cross-referencing policy docs. ChatGPT can draft answers, but it can&#8217;t cite specific sections or export a file procurement will accept.</p>
+      <p><strong>A security questionnaire is a trust document, and a wrong answer is a liability.</strong> Most pre-SOC2 founders answer them one of two bad ways: burn a weekend cross-referencing policy docs by hand, or paste the questions into ChatGPT and ship whatever confident-sounding &#8220;yes&#8221; it invents. That second path is worse than slow &#8212; a fabricated &#8220;yes&#8221; to a control you don&#8217;t have is a misrepresentation to enterprise procurement. SecurityQFill exists so you can answer honestly, quickly, and from evidence.</p>
     </div>
   </div>
 </section>
@@ -366,7 +353,6 @@
   <div class="container">
     <p class="cta-label">Join the early access list</p>
     <div class="cta-form-wrap">
-      <!-- SETUP: Replace YOUR_FORM_ID with your Formspree form ID from formspree.io -->
       <form action="https://formspree.io/f/xykrjrva" method="POST">
         <div class="form-row">
           <input type="email" name="email" placeholder="you@yourcompany.com" required>
@@ -380,26 +366,58 @@
 
 <section id="how-it-works">
   <div class="container">
-    <h2>Two ways to use it</h2>
-    <p class="section-sub">Pick whichever fits your workflow.</p>
-    <div class="paths-grid">
-      <div class="path-card">
-        <p class="path-card-label">Web App</p>
-        <h3>Upload and download</h3>
-        <ol class="path-steps">
-          <li><span class="path-step-num">1</span><span>Upload your questionnaire and policy documents</span></li>
-          <li><span class="path-step-num">2</span><span>AI fills every row with citations from your policies</span></li>
-          <li><span class="path-step-num">3</span><span>Download the completed file in the same format</span></li>
-        </ol>
+    <h2>How it works</h2>
+    <p class="section-sub">Four steps from an emailed questionnaire to a credible, evidence-backed response.</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h3>Connect GitHub (read-only)</h3>
+          <p>An automated scan reads only specific named files &#8212; <span class="hl">branch protection rules, CI workflow configs (Dependabot, Snyk, CodeQL), dependency manifests, and Terraform / infrastructure-as-code</span> &#8212; and turns them into verified facts before you type anything. It proves what&#8217;s actually configured: encryption at rest, enforced code review, dependency scanning, audit logging.</p>
+        </div>
       </div>
-      <div class="path-card">
-        <p class="path-card-label">Chrome Extension</p>
-        <h3>Fill web forms in place</h3>
-        <ol class="path-steps">
-          <li><span class="path-step-num">1</span><span>Install from the Chrome Web Store</span></li>
-          <li><span class="path-step-num">2</span><span>Upload your files, or click &#8220;Detect questionnaire&#8221; on a web form</span></li>
-          <li><span class="path-step-num">3</span><span>Answers fill directly into the form &#8212; no downloading needed</span></li>
-        </ol>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h3>Review and attest</h3>
+          <p>You get a pre-filled checklist of your posture instead of a blank page. Confirm what the scan found and fill the handful of gaps only you can answer &#8212; MFA enforcement, SOC 2 status, pen test history &#8212; and attach evidence like an Okta MFA screenshot. About <span class="hl">10&#8211;15 minutes</span>.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h3>Upload the questionnaire</h3>
+          <p>Drop in the XLSX, CSV, or DOCX procurement emailed you. SecurityQFill parses it and shows you the detected question and answer columns to <span class="hl">confirm the mapping</span> before anything is filled &#8212; so answers never land in the wrong cells.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-body">
+          <h3>Fill from verified facts, then download</h3>
+          <p>Answers are generated <span class="hl">only from your verified facts</span>, each with a source citation. Where no fact exists, you get an honest gap response &#8212; never a fabrication. Download the filled questionnaire in its original format, plus a gap-analysis report telling you exactly what to fix next.</p>
+        </div>
+      </div>
+    </div>
+    <p class="flow-note">A Chrome extension for auto-filling web-based vendor portals is planned for a later version. For v1, the workflow is built around the emailed XLSX / DOCX / CSV attachment that pre-SOC2 founders actually receive.</p>
+  </div>
+</section>
+
+<section id="grounded">
+  <div class="container">
+    <h2>It refuses to make up answers</h2>
+    <p class="section-sub">This is the whole point. Every answer is grounded in a verified source, or it&#8217;s flagged as an honest gap with a real next step. No confident fabrications.</p>
+    <div class="demo-pair">
+      <div class="demo-card grounded">
+        <div class="demo-head"><span>Grounded answer</span><span class="badge">&#10003; Verified (scan)</span></div>
+        <p class="demo-q"><strong>Q:</strong> Is production access logged and retained?</p>
+        <p class="demo-a">Yes. AWS CloudTrail is enabled across all regions, providing centralized logging of API activity.</p>
+        <p class="demo-cite">Source: Terraform <code>aws_cloudtrail</code> resource, automated scan</p>
+      </div>
+      <div class="demo-card gap">
+        <div class="demo-head"><span>Honest gap</span><span class="badge">Gap &#183; no source</span></div>
+        <p class="demo-q"><strong>Q:</strong> Is there a formal periodic access review process?</p>
+        <p class="demo-a">We do not currently have a formal access review process. Access is managed ad hoc through Okta; a quarterly recertification process is planned.</p>
+        <p class="demo-cite">Next step: quarterly Okta recertification checklist &#183; ~2 hours, $0</p>
       </div>
     </div>
   </div>
@@ -407,28 +425,29 @@
 
 <section id="what-you-get">
   <div class="container">
-    <h2>What&#8217;s included</h2>
-    <p class="section-sub">One flat fee. Here&#8217;s exactly what that covers.</p>
+    <h2>What makes it different</h2>
+    <p class="section-sub">Not another AI answer generator. A verification engine that&#8217;s honest about what it can and can&#8217;t prove.</p>
     <div class="value-grid">
       <div class="value-card">
-        <div class="value-icon">&#128196;</div>
-        <strong>Every row filled with citations</strong>
-        <p>Answers reference specific sections of your policy documents. Delivered in the same format procurement sent you.</p>
+        <div class="value-icon">&#128269;</div>
+        <strong>Facts found automatically</strong>
+        <p>The GitHub + IaC scan verifies branch protection, CI security tools, and Terraform encryption configs on its own &#8212; before you fill in a single field. It recovers real controls you&#8217;d otherwise forget to mention.</p>
       </div>
       <div class="value-card">
-        <div class="value-icon">&#128231;</div>
-        <strong>Delivery by email</strong>
-        <p>Your receipt and download link arrive by email. No account to create &#8212; just an email address for delivery.</p>
+        <div class="value-icon">&#9989;</div>
+        <strong>Grounded-only, never invented</strong>
+        <p>No answer is generated without a verified source. Gaps get honest, professionally worded templates &#8212; not a confident &#8220;yes&#8221; to a control you don&#8217;t have.</p>
       </div>
       <div class="value-card">
-        <div class="value-icon">&#128737;</div>
-        <strong>Full refund guarantee</strong>
-        <p>If processing fails for any reason, you get your money back. No questions asked.</p>
+        <div class="value-icon">&#128203;</div>
+        <strong>Gap analysis report</strong>
+        <p>Every unanswered question comes with a specific remediation step and a rough effort estimate &#8212; &#8220;enforce MFA in Okta: ~1 hour, $0&#8221; vs. &#8220;commission a pen test: $8&#8211;15K, 4&#8211;6 weeks&#8221; &#8212; so you know what to tackle before the deadline.</p>
       </div>
       <div class="value-card">
-        <div class="value-icon">&#10003;</div>
-        <strong>No subscription, no storage</strong>
-        <p>No seat pricing, no annual commitment, no document storage. Pay only when you have a questionnaire to fill.</p>
+        <div class="value-icon">&#128272;</div>
+        <strong>BYOK &#8212; your data stays yours</strong>
+        <p>Your questionnaire and code never touch our servers. Your LLM key, your API call, your data. The scan reads only specific named files, never a full clone.</p>
+        <p>LLM cost per fill: pennies &#8212; under $1.50 even on a 300-row questionnaire at premium model pricing. We never mark up your inference, because we never touch it.</p>
       </div>
     </div>
   </div>
@@ -437,33 +456,30 @@
 <section id="pricing">
   <div class="container">
     <div class="pricing-hero">
-      <div class="price">$49<span>/questionnaire</span></div>
-      <p class="price-tag">One flat fee. No subscription. No hidden costs.</p>
+      <div class="price">$49<span>/fill</span></div>
+      <p class="price-tag">One flat fee per questionnaire. No subscription. No seats. No storage.</p>
       <div class="price-guarantee">&#10003; Full refund if processing fails</div>
     </div>
+    <p class="section-sub" style="text-align:center; margin: 0 auto 32px;">Every fill includes the GitHub + IaC scan, a source citation on every grounded answer, the honest gap responses, and the gap-analysis remediation report. Pay only when you have a questionnaire to fill.</p>
     <div class="comparison-table">
       <div class="comparison-header">
-        <span>How others handle it</span><span>Cost</span><span>Time</span>
+        <span>How founders handle it</span><span>Cost</span>
       </div>
       <div class="comparison-row">
-        <span class="comp-option">Hire a security consultant</span>
-        <span class="comp-cost">$500&#8211;2,000</span>
-        <span class="comp-time">3&#8211;5 days</span>
+        <span class="comp-option">Do it yourself<small>~3 days of manual cross-referencing &#183; no citations &#183; risk of misrepresentation</small></span>
+        <span class="comp-cost">$0 + 3 days</span>
       </div>
       <div class="comparison-row">
-        <span class="comp-option">Do it yourself<small>Manual cross-referencing, no citations</small></span>
-        <span class="comp-cost">$0</span>
-        <span class="comp-time">~3 days</span>
-      </div>
-      <div class="comparison-row">
-        <span class="comp-option">Copy/paste into ChatGPT<small>Pro plan required &middot; complex coordination &middot; no export</small></span>
+        <span class="comp-option">Paste into ChatGPT<small>~1 day &#183; fabricates answers with no source &#183; no gap analysis &#183; Pro plan required</small></span>
         <span class="comp-cost">$20+/mo</span>
-        <span class="comp-time">~1 day</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Vanta / SafeBase / compliance platform<small>Full compliance platform &#183; annual contract &#183; overkill before you need SOC 2</small></span>
+        <span class="comp-cost">$10K&#8211;42K/yr</span>
       </div>
       <div class="comparison-row highlight">
-        <span class="comp-option">SecurityQFill<small>Policy citations included &middot; exports in original format</small></span>
+        <span class="comp-option">SecurityQFill<small>Grounded-only &#183; gap analysis included &#183; BYOK, your data never leaves your control</small></span>
         <span class="comp-cost">$49/fill</span>
-        <span class="comp-time">Under 5 minutes</span>
       </div>
     </div>
   </div>
@@ -474,8 +490,9 @@
     <div class="trust-box">
       <div class="trust-icon">&#128274;</div>
       <div>
-        <h3>Your documents never touch our servers.</h3>
-        <p>Already using OpenAI, Anthropic Claude, or Azure OpenAI? Use your existing API key &#8212; your documents go directly to your LLM provider and never pass through our servers. Your key is held in your browser for the session only.</p>
+        <h3>Your code and documents never touch our servers.</h3>
+        <p>Both your LLM key and your GitHub connection are held in your browser for the session only. Questionnaire parsing, answer generation, and the GitHub scan all run client-side &#8212; your files go directly to your own LLM provider and GitHub, never through us.</p>
+        <p>The GitHub scan is a deliberate, inspectable allowlist of file paths &#8212; branch protection settings, named workflow files, dependency manifests, and IaC configs &#8212; never a full repository clone. You can see exactly which files were read.</p>
       </div>
     </div>
   </div>
@@ -485,8 +502,8 @@
   <div class="container">
     <div class="founder-section">
       <p>We&#8217;re the team behind SecurityQFill. We&#8217;ve spent years building and selling B2B software, and we kept running into the same wall: enterprise deals stalling because of security questionnaires.</p>
-      <p>The problem isn&#8217;t complexity &#8212; it&#8217;s repetition. Every question maps to a section of your existing policy docs. The AI era makes that mapping instant. We built SecurityQFill to turn a weekend of copy-pasting into a five-minute upload.</p>
-      <p>We&#8217;re validating before we build. If you&#8217;ve ever lost time to a vendor security questionnaire, we&#8217;d love to hear about it.</p>
+      <p>The problem isn&#8217;t just repetition &#8212; it&#8217;s honesty under pressure. A blank questionnaire loses the deal; a fabricated one is a liability. The right answer is to verify what&#8217;s actually true from your own code and infrastructure, answer from that, and be honest about the gaps with a plan to close them. That&#8217;s the product we&#8217;re building.</p>
+      <p>We&#8217;re validating before we build. If you&#8217;ve ever lost time &#8212; or sleep &#8212; to a vendor security questionnaire, we&#8217;d love to hear about it.</p>
       <p><a href="mailto:tyrelltle@gmail.com">tyrelltle@gmail.com</a></p>
     </div>
   </div>
@@ -496,15 +513,16 @@
   <div class="container">
     <h2>FAQ</h2>
     <div class="faq-list">
-      <details><summary>How accurate is it?</summary><p class="faq-answer">Accuracy depends on how well your policy documents cover the questions asked. Rows with a strong policy match are high-confidence. Rows where no relevant policy content was found are flagged for manual review rather than guessed.</p></details>
-      <details><summary>What if AI doesn&#8217;t know the answer?</summary><p class="faq-answer">Those rows are flagged with a &#8220;low confidence&#8221; label and left for you to fill manually. SecurityQFill never invents an answer where it doesn&#8217;t have policy backing.</p></details>
-      <details><summary>Does it support Excel?</summary><p class="faq-answer">Yes. Upload CSV or XLSX questionnaires and download your filled file in the same format.</p></details>
-      <details><summary>Can I edit answers before downloading?</summary><p class="faq-answer">Not in v1 &#8212; the filled file downloads directly. You can edit it in Excel or Google Sheets after download.</p></details>
-      <details><summary>Is my API key stored?</summary><p class="faq-answer">No. Your key is held in your browser for the duration of the session only. It is never sent to or stored on our servers.</p></details>
-      <details><summary>Which AI providers are supported?</summary><p class="faq-answer">Anthropic (Claude), OpenAI (GPT-4o), Azure OpenAI, and Google Vertex AI. If you have an existing enterprise LLM contract with any of these, you can use it.</p></details>
-      <details><summary>What questionnaire formats are supported?</summary><p class="faq-answer">PDF, DOCX, CSV, and XLSX. The most common formats: CAIQ, SIG, Microsoft vendor security forms, and freeform DOCX tables.</p></details>
-      <details><summary>Is there a Chrome extension?</summary><p class="faq-answer">Yes. SecurityQFill will be available as both a web app and a Chrome extension. The extension adds one extra capability: if your questionnaire is a web form, you can fill it in-place directly from your browser without downloading or re-uploading anything.</p></details>
-      <details><summary>Can I retry if something goes wrong?</summary><p class="faq-answer">Yes. If processing fails for any reason, you get a full refund. No questions asked.</p></details>
+      <details><summary>What does &#8220;grounded-only&#8221; mean?</summary><p class="faq-answer">We only answer questions backed by a verified fact &#8212; from your GitHub scan, your uploaded documents, or your own attestations. When there&#8217;s no source, we don&#8217;t generate anything. Instead we produce an honest, professionally worded gap response you can submit as-is. That refusal is the feature, not a limitation.</p></details>
+      <details><summary>What if I don&#8217;t have a SOC 2 or a pen test?</summary><p class="faq-answer">That&#8217;s exactly who this product is for. Those questions become honest gap responses with specific next steps &#8212; for example, &#8220;We have not completed a SOC 2 audit; it&#8217;s on our roadmap as a Series A company.&#8221; Enterprise procurement handles honest gaps far better than fabricated controls that fall apart under a follow-up question.</p></details>
+      <details><summary>How is this different from just using ChatGPT?</summary><p class="faq-answer">ChatGPT generates plausible-sounding answers with no source. In a security review, submitting a fabricated &#8220;yes&#8221; to a control you don&#8217;t have is a misrepresentation liability. SecurityQFill refuses to answer without a verified source, cites where each answer came from, and gives you honest gap responses everywhere else &#8212; plus a remediation report ChatGPT can&#8217;t produce.</p></details>
+      <details><summary>Is my source code safe?</summary><p class="faq-answer">Yes. The GitHub scan reads only specific named files &#8212; branch protection settings, CI workflow configs, dependency manifests, and Terraform / IaC files. Never a full clone, never arbitrary source. Every call goes directly from your browser to GitHub; your code and questionnaire documents never transit our servers.</p></details>
+      <details><summary>What does the gap analysis include?</summary><p class="faq-answer">A list of every unanswered question paired with a specific remediation recommendation and a rough time and cost estimate &#8212; so before the deadline you know exactly what to work on, what&#8217;s a quick $0 fix, and what (like a pen test) simply can&#8217;t be done in time and should be disclosed honestly instead.</p></details>
+      <details><summary>What&#8217;s my LLM cost?</summary><p class="faq-answer">Under $1.50 even on a 300-row questionnaire at premium model pricing &#8212; often a fraction of that on a lighter model. You bring your own key, so you pay your provider directly at cost. We never see your data, and we never mark up your inference.</p></details>
+      <details><summary>What questionnaire and question formats are supported?</summary><p class="faq-answer">XLSX, CSV, and DOCX &#8212; the formats procurement actually emails, including SIG Lite, CAIQ, and freeform vendor forms. We fill answers back into the original file and preserve its formatting, and always confirm the column mapping with you before filling.</p></details>
+      <details><summary>Which LLM providers can I use?</summary><p class="faq-answer">v1 targets Anthropic (Claude) using your own API key. Additional providers (OpenAI, Azure OpenAI, Google Vertex) are planned. If you have an existing enterprise LLM contract, the goal is that you can bring it.</p></details>
+      <details><summary>Is there a Chrome extension?</summary><p class="faq-answer">Not for v1. A Chrome extension for auto-filling web-based vendor portals is planned for a later version. v1 focuses on the emailed XLSX / DOCX / CSV attachment that pre-SOC2 founders actually receive today.</p></details>
+      <details><summary>What if something goes wrong?</summary><p class="faq-answer">If processing fails for any reason, you get a full refund. No questions asked.</p></details>
     </div>
   </div>
 </section>
@@ -512,9 +530,8 @@
 <section id="bottom-cta">
   <div class="container">
     <div class="bottom-cta">
-      <h2>Get your weekend back.</h2>
+      <h2>Answer honestly. Win the deal anyway.</h2>
       <p>Join the early access list. We&#8217;ll email you the moment it launches &#8212; and you&#8217;ll get a discount on your first fill.</p>
-      <!-- SETUP: Same Formspree form ID as above -->
       <form action="https://formspree.io/f/xykrjrva" method="POST">
         <div class="form-row" style="justify-content:center;">
           <input type="email" name="email" placeholder="you@yourcompany.com" required>
