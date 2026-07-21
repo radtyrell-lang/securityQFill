@@ -112,7 +112,7 @@
 
       <!-- Q1 -->
       <div class="q">
-        <p class="q-label">Question 1 of 3</p>
+        <p class="q-label">Question 1 of 4</p>
         <p class="q-text">Have you received a vendor security questionnaire in the last 6 months?</p>
         <div class="options">
           <label class="opt">
@@ -140,7 +140,7 @@
 
       <!-- Q2 -->
       <div class="q">
-        <p class="q-label">Question 2 of 3</p>
+        <p class="q-label">Question 2 of 4</p>
         <p class="q-text">How long did your last security questionnaire take to fill?</p>
         <div class="options">
           <label class="opt">
@@ -168,7 +168,7 @@
 
       <!-- Q3 -->
       <div class="q">
-        <p class="q-label">Question 3 of 3</p>
+        <p class="q-label">Question 3 of 4</p>
         <p class="q-text">If SecurityQFill saved you 5+ hours on your next questionnaire, what would you expect to pay per use?</p>
         <div class="options">
           <label class="opt">
@@ -196,8 +196,32 @@
         <textarea name="q3_comments" placeholder="Open feedback..."></textarea>
       </div>
 
+      <!-- Q4 -->
+      <div class="q">
+        <p class="q-label">Question 4 of 4</p>
+        <p class="q-text">SecurityQFill's core feature scans your GitHub repository (read-only, specific files only — no full clone) to automatically detect your security controls. Would you grant that access?</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="q4" value="yes_definitely">
+            <span>Yes — read-only GitHub access for auto-detection sounds worth it</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q4" value="yes_with_review">
+            <span>Probably yes — I'd want to review exactly which files are read first</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q4" value="no_manual_preferred">
+            <span>No — I'd rather answer the security controls checklist manually</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q4" value="no_no_github">
+            <span>No — we don't use GitHub / our infra isn't there</span>
+          </label>
+        </div>
+      </div>
+
       <input type="hidden" name="_subject" value="SecurityQFill survey response">
-      <input type="hidden" name="_next" value="https://tyrelltle.github.io/securityqfill/thank-you.html">
+      <input type="hidden" name="_next" value="https://radtyrell-lang.github.io/securityQFill/thank-you.html">
 
       <div class="submit-wrap">
         <button type="submit" class="btn-submit">Submit — and I'm done</button>
