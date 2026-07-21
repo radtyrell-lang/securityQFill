@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecurityQFill — Fill security questionnaires in 5 minutes</title>
+  <meta name="description" content="Upload your security questionnaire and policies. AI fills every answer with citations from your own documents. Available as a web app and Chrome extension. No subscription.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #fafafa;
+      --surface:     #ffffff;
+      --surface-warm:#f8f6f3;
+      --border:      #e5e2de;
+      --border-light:#f0eeeb;
+      --accent:      #0d7a3e;
+      --accent-soft: #e8f5ec;
+      --accent-dim:  #0a5c2e;
+      --text:        #1a1a1a;
+      --text-muted:  #5c5c5c;
+      --text-subtle: #8a8a8a;
+      --text-light:  #b0b0b0;
+      --radius:      10px;
+      --radius-lg:   16px;
+      --shadow-sm:   0 1px 2px rgba(0,0,0,0.04);
+      --shadow:      0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg:   0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 72px 0; }
+    section + section { border-top: 1px solid var(--border-light); }
+
+    /* Nav */
+    nav {
+      padding: 20px 0;
+      position: sticky; top: 0;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+      border-bottom: 1px solid var(--border-light);
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+    .nav-cta {
+      font-size: 0.85rem; font-weight: 600; color: var(--accent);
+      background: var(--accent-soft); padding: 8px 18px; border-radius: 100px; transition: all 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent); color: #fff; text-decoration: none; }
+
+    /* Hero */
+    .hero { padding: 80px 0 48px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 24px;
+    }
+    .hero-eyebrow::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); display: inline-block;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.2rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -0.03em;
+      color: var(--text); margin-bottom: 20px; max-width: 600px;
+    }
+    .sub-headline {
+      font-size: 1.15rem; color: var(--text-muted);
+      line-height: 1.65; margin-bottom: 40px; max-width: 540px;
+    }
+
+    /* Real output screenshot */
+    .screenshot-wrap {
+      margin-bottom: 48px;
+    }
+    .screenshot-label {
+      font-size: 0.85rem; font-weight: 600; color: var(--text-subtle);
+      margin-bottom: 14px; text-align: center; letter-spacing: 0.02em;
+    }
+    .screenshot-img {
+      width: 100%; border-radius: var(--radius-lg);
+      border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+      display: block;
+    }
+    .screenshot-caption {
+      font-size: 0.78rem; color: var(--text-light); text-align: center; margin-top: 10px;
+    }
+
+    /* Mockup */
+    .mockup-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px;
+      box-shadow: var(--shadow); margin-bottom: 48px;
+    }
+    .mockup-label {
+      font-size: 0.85rem; font-weight: 600; color: var(--text-subtle);
+      margin-bottom: 20px; text-align: center; letter-spacing: 0.02em;
+    }
+    .mockup { display: flex; align-items: stretch; gap: 16px; }
+    .mock-card { flex: 1 1 0; min-width: 0; border-radius: var(--radius); padding: 20px 22px; }
+    .mock-card.before { background: var(--surface-warm); border: 1px dashed var(--border); }
+    .mock-card.after { background: var(--accent-soft); border: 1px solid #c8e6d0; }
+    .mock-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-subtle); margin-bottom: 16px;
+    }
+    .mock-card.after .mock-tag { color: var(--accent); }
+    .mock-conf {
+      font-size: 0.7rem; font-weight: 700; color: var(--accent);
+      background: #fff; padding: 3px 10px; border-radius: 100px;
+    }
+    .mock-field { margin-bottom: 12px; }
+    .mock-field:last-child { margin-bottom: 0; }
+    .mock-field .k {
+      display: block; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-subtle); margin-bottom: 4px;
+    }
+    .mock-field .v { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+    .mock-blank { color: var(--text-light); font-style: italic; }
+    .mock-card.after .mock-cite .v { color: var(--accent); font-size: 0.8rem; font-weight: 500; }
+    .mock-arrow {
+      flex: 0 0 auto; align-self: center;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: var(--text-subtle); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.04em; white-space: nowrap;
+    }
+    .mock-arrow .glyph { font-size: 1.4rem; line-height: 1; color: var(--accent); }
+
+    /* Pain */
+    .pain-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 40px;
+    }
+    .pain-block p { font-size: 1rem; color: var(--text-muted); line-height: 1.7; }
+    .pain-block p strong { color: var(--text); font-weight: 600; }
+
+    /* CTA */
+    .cta-label { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+    .cta-form-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm);
+    }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .form-row input[type="email"] {
+      flex: 1 1 240px; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius); color: var(--text); font-size: 1rem; padding: 12px 16px;
+      outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-row input[type="email"]:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,122,62,0.08);
+    }
+    .form-row input[type="email"]::placeholder { color: var(--text-light); }
+    .btn-primary {
+      background: var(--accent); color: #fff; font-size: 0.95rem; font-weight: 700;
+      padding: 12px 24px; border: none; border-radius: var(--radius);
+      cursor: pointer; white-space: nowrap; transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-primary:active { transform: scale(0.98); }
+    .cta-microcopy { font-size: 0.82rem; color: var(--text-subtle); margin-top: 14px; line-height: 1.5; }
+
+    /* How it works */
+    h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .section-sub { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; }
+    .paths-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .path-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .path-card:hover { border-color: #c8e6d0; box-shadow: var(--shadow); }
+    .path-card-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+    }
+    .path-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 18px; }
+    .path-steps { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .path-steps li { display: flex; gap: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+    .path-step-num {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; color: var(--accent); margin-top: 1px;
+    }
+
+    /* Value grid */
+    .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .value-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .value-card .value-icon {
+      width: 36px; height: 36px; border-radius: 10px; background: var(--accent-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; margin-bottom: 14px;
+    }
+    .value-card strong { display: block; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .value-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; }
+
+    /* Pricing */
+    .pricing-hero { text-align: center; margin-bottom: 40px; }
+    .pricing-hero .price { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.04em; color: var(--text); line-height: 1; }
+    .pricing-hero .price span { font-size: 1.2rem; font-weight: 600; color: var(--text-subtle); vertical-align: super; margin-left: 2px; }
+    .pricing-hero .price-tag { font-size: 0.9rem; color: var(--text-muted); margin-top: 8px; }
+    .pricing-hero .price-guarantee {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 16px;
+      font-size: 0.85rem; color: var(--accent); font-weight: 600;
+      background: var(--accent-soft); padding: 6px 14px; border-radius: 100px;
+    }
+    .comparison-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .comparison-row {
+      display: flex; align-items: center; padding: 16px 24px;
+      border-bottom: 1px solid var(--border-light); font-size: 0.9rem;
+    }
+    .comparison-row:last-child { border-bottom: none; }
+    .comparison-row.highlight { background: var(--accent-soft); }
+    .comparison-row .comp-option { flex: 1; font-weight: 600; color: var(--text); }
+    .comparison-row .comp-cost { width: 120px; text-align: right; color: var(--text-muted); }
+    .comparison-row .comp-time { width: 140px; text-align: right; color: var(--text-muted); }
+    .comparison-row.highlight .comp-cost,
+    .comparison-row.highlight .comp-time { color: var(--accent); font-weight: 700; }
+    .comparison-header {
+      display: flex; padding: 12px 24px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-subtle); background: var(--surface-warm); border-bottom: 1px solid var(--border-light);
+    }
+    .comparison-header span:first-child { flex: 1; }
+    .comparison-header span:nth-child(2) { width: 120px; text-align: right; }
+    .comparison-header span:nth-child(3) { width: 140px; text-align: right; }
+
+    /* Trust */
+    .trust-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px; display: flex; gap: 24px; align-items: flex-start;
+    }
+    .trust-icon {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent-soft); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .trust-box h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .trust-box p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* Founder */
+    .founder-section {
+      background: var(--surface-warm); border-radius: var(--radius-lg); padding: 40px; position: relative;
+    }
+    .founder-section::before {
+      content: "\201C"; position: absolute; top: 24px; left: 32px;
+      font-size: 4rem; color: var(--border); font-family: Georgia, serif; line-height: 1;
+    }
+    .founder-section p {
+      font-size: 1.05rem; color: var(--text-muted); line-height: 1.8;
+      margin-bottom: 18px; position: relative; z-index: 1;
+    }
+    .founder-section p:first-of-type { color: var(--text); font-weight: 700; font-size: 1.1rem; margin-bottom: 20px; }
+    .founder-section p:last-child { margin-bottom: 0; }
+
+    /* FAQ */
+    .faq-list { display: flex; flex-direction: column; }
+    details { border-bottom: 1px solid var(--border-light); }
+    details:first-of-type { border-top: 1px solid var(--border-light); }
+    summary {
+      list-style: none; padding: 20px 0; cursor: pointer;
+      font-weight: 600; font-size: 0.95rem; color: var(--text);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; flex-shrink: 0; font-size: 1.3rem; color: var(--text-subtle); transition: transform 0.2s; font-weight: 400; }
+    details[open] summary::after { transform: rotate(45deg); }
+    .faq-answer { font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; padding-bottom: 20px; }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      background: var(--surface); border: 1.5px solid var(--accent);
+      border-radius: var(--radius-lg); padding: 48px 40px; text-align: center; box-shadow: var(--shadow-lg);
+    }
+    .bottom-cta h2 { font-size: 1.6rem; margin-bottom: 12px; }
+    .bottom-cta > p { color: var(--text-muted); font-size: 1rem; margin-bottom: 28px; max-width: 420px; margin-left: auto; margin-right: auto; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border-light); padding: 40px 0; }
+    footer .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    footer p { font-size: 0.85rem; color: var(--text-subtle); }
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: var(--text); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      section { padding: 48px 0; }
+      .hero { padding: 56px 0 40px; }
+      h1 { font-size: 2rem; }
+      .form-row { flex-direction: column; }
+      .form-row input[type="email"], .btn-primary { width: 100%; }
+      .paths-grid, .value-grid { grid-template-columns: 1fr; }
+      .mockup { flex-direction: column; }
+      .mock-arrow { flex-direction: row; }
+      .mock-arrow .glyph { transform: rotate(90deg); }
+      .trust-box { flex-direction: column; }
+      .founder-section { padding: 28px 24px; }
+      .bottom-cta { padding: 32px 24px; }
+      footer .container { flex-direction: column; align-items: flex-start; }
+      .comparison-row { flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 20px; }
+      .comparison-row .comp-cost, .comparison-row .comp-time { width: auto; text-align: left; }
+      .comparison-header { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <span class="nav-brand">SecurityQFill</span>
+    <a class="nav-cta" href="#early-access">Get early access</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="container">
+    <span class="hero-eyebrow">Early Access</span>
+    <h1>Fill your security questionnaire in 5 minutes, not 5 hours.</h1>
+    <p class="sub-headline">Upload your questionnaire and your security policies. AI fills every answer with citations from your own documents. No subscription.</p>
+
+    <div class="screenshot-wrap">
+      <p class="screenshot-label">Real output — 8 questions filled in under 30 seconds</p>
+      <img class="screenshot-img" src="poc-results.png" alt="SecurityQFill results table: 8 security questionnaire rows filled with answers, policy citations, and HIGH confidence badges">
+      <p class="screenshot-caption">Demo mode · Acme Corp Security Policy v2.1 · All 8 rows HIGH confidence</p>
+    </div>
+
+    <div class="mockup-wrap">
+      <p class="mockup-label">Here&#8217;s what it does to every row</p>
+      <div class="mockup">
+        <div class="mock-card before">
+          <div class="mock-head"><span class="mock-tag">Before</span></div>
+          <div class="mock-field"><span class="k">Question</span><span class="v">Do you encrypt customer data at rest?</span></div>
+          <div class="mock-field"><span class="k">Answer</span><span class="v"><span class="mock-blank">[ blank ]</span></span></div>
+        </div>
+        <div class="mock-arrow" aria-hidden="true">
+          <span class="glyph">&#8594;</span>
+          <span>SecurityQFill</span>
+        </div>
+        <div class="mock-card after">
+          <div class="mock-head"><span class="mock-tag">After</span><span class="mock-conf">&#10003; High confidence</span></div>
+          <div class="mock-field"><span class="k">Question</span><span class="v">Do you encrypt customer data at rest?</span></div>
+          <div class="mock-field"><span class="k">Answer</span><span class="v">Yes. All customer data is encrypted at rest using AES-256 and in transit using TLS 1.3.</span></div>
+          <div class="mock-field mock-cite"><span class="k">Citation</span><span class="v">Security Policy.pdf &#8212; Section 4.2</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pain-block">
+      <p><strong>You shouldn&#8217;t spend your weekend on a process that adds zero value to your product.</strong> Security questionnaires are a tax on closing enterprise deals. Most have 80&#8211;200 rows. Filling them manually takes 4&#8211;8 hours of cross-referencing policy docs. ChatGPT can draft answers, but it can&#8217;t cite specific sections or export a file procurement will accept.</p>
+    </div>
+  </div>
+</section>
+
+<section id="early-access">
+  <div class="container">
+    <p class="cta-label">Join the early access list</p>
+    <div class="cta-form-wrap">
+      <!-- SETUP: Replace YOUR_FORM_ID with your Formspree form ID from formspree.io -->
+      <form action="https://formspree.io/f/xykrjrva" method="POST">
+        <div class="form-row">
+          <input type="email" name="email" placeholder="you@yourcompany.com" required>
+          <button type="submit" class="btn-primary">Get early access</button>
+        </div>
+      </form>
+      <p class="cta-microcopy">We&#8217;re validating before we build. Sign up and we&#8217;ll email you when it&#8217;s ready &#8212; early access members get a discount on their first fill. No credit card required.</p>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works">
+  <div class="container">
+    <h2>Two ways to use it</h2>
+    <p class="section-sub">Pick whichever fits your workflow.</p>
+    <div class="paths-grid">
+      <div class="path-card">
+        <p class="path-card-label">Web App</p>
+        <h3>Upload and download</h3>
+        <ol class="path-steps">
+          <li><span class="path-step-num">1</span><span>Upload your questionnaire and policy documents</span></li>
+          <li><span class="path-step-num">2</span><span>AI fills every row with citations from your policies</span></li>
+          <li><span class="path-step-num">3</span><span>Download the completed file in the same format</span></li>
+        </ol>
+      </div>
+      <div class="path-card">
+        <p class="path-card-label">Chrome Extension</p>
+        <h3>Fill web forms in place</h3>
+        <ol class="path-steps">
+          <li><span class="path-step-num">1</span><span>Install from the Chrome Web Store</span></li>
+          <li><span class="path-step-num">2</span><span>Upload your files, or click &#8220;Detect questionnaire&#8221; on a web form</span></li>
+          <li><span class="path-step-num">3</span><span>Answers fill directly into the form &#8212; no downloading needed</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="what-you-get">
+  <div class="container">
+    <h2>What&#8217;s included</h2>
+    <p class="section-sub">One flat fee. Here&#8217;s exactly what that covers.</p>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-icon">&#128196;</div>
+        <strong>Every row filled with citations</strong>
+        <p>Answers reference specific sections of your policy documents. Delivered in the same format procurement sent you.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">&#128231;</div>
+        <strong>Delivery by email</strong>
+        <p>Your receipt and download link arrive by email. No account to create &#8212; just an email address for delivery.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">&#128737;</div>
+        <strong>Full refund guarantee</strong>
+        <p>If processing fails for any reason, you get your money back. No questions asked.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">&#10003;</div>
+        <strong>No subscription, no storage</strong>
+        <p>No seat pricing, no annual commitment, no document storage. Pay only when you have a questionnaire to fill.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="pricing-hero">
+      <div class="price">$49<span>/questionnaire</span></div>
+      <p class="price-tag">One flat fee. No subscription. No hidden costs.</p>
+      <div class="price-guarantee">&#10003; Full refund if processing fails</div>
+    </div>
+    <div class="comparison-table">
+      <div class="comparison-header">
+        <span>How others handle it</span><span>Cost</span><span>Time</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Hire a security consultant</span>
+        <span class="comp-cost">$500&#8211;2,000</span>
+        <span class="comp-time">3&#8211;5 days</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Do it yourself</span>
+        <span class="comp-cost">$0</span>
+        <span class="comp-time">4&#8211;8 hours</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Copy/paste into ChatGPT</span>
+        <span class="comp-cost">$0</span>
+        <span class="comp-time">2&#8211;4 hours, no citations</span>
+      </div>
+      <div class="comparison-row highlight">
+        <span class="comp-option">SecurityQFill</span>
+        <span class="comp-cost">$49</span>
+        <span class="comp-time">Under 5 minutes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="container">
+    <div class="trust-box">
+      <div class="trust-icon">&#128274;</div>
+      <div>
+        <h3>Your documents never touch our servers.</h3>
+        <p>Already using OpenAI, Anthropic Claude, or Azure OpenAI? Use your existing API key &#8212; your documents go directly to your LLM provider and never pass through our servers. Your key is held in your browser for the session only.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="founder">
+  <div class="container">
+    <div class="founder-section">
+      <p>Hi, I&#8217;m Tyrell.</p>
+      <p>I&#8217;ve built B2B software for years. Last year, I got hit with my first enterprise security questionnaire on a deal I&#8217;d spent three months closing. 80 rows, 5-day deadline, no security team. I spent the weekend manually cross-referencing our policy docs and filling in answers.</p>
+      <p>We got the deal &#8212; but I lost my weekend to a process that added zero value. I built SecurityQFill so the next time it happens, it takes 5 minutes, not 6 hours.</p>
+      <p>&#8212; Tyrell &middot; <a href="mailto:tyrelltle@gmail.com">tyrelltle@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <h2>FAQ</h2>
+    <div class="faq-list">
+      <details><summary>How accurate is it?</summary><p class="faq-answer">Accuracy depends on how well your policy documents cover the questions asked. Rows with a strong policy match are high-confidence. Rows where no relevant policy content was found are flagged for manual review rather than guessed.</p></details>
+      <details><summary>What if AI doesn&#8217;t know the answer?</summary><p class="faq-answer">Those rows are flagged with a &#8220;low confidence&#8221; label and left for you to fill manually. SecurityQFill never invents an answer where it doesn&#8217;t have policy backing.</p></details>
+      <details><summary>Does it support Excel?</summary><p class="faq-answer">Yes. Upload CSV or XLSX questionnaires and download your filled file in the same format.</p></details>
+      <details><summary>Can I edit answers before downloading?</summary><p class="faq-answer">Not in v1 &#8212; the filled file downloads directly. You can edit it in Excel or Google Sheets after download.</p></details>
+      <details><summary>Is my API key stored?</summary><p class="faq-answer">No. Your key is held in your browser for the duration of the session only. It is never sent to or stored on our servers.</p></details>
+      <details><summary>Which AI providers are supported?</summary><p class="faq-answer">Anthropic (Claude), OpenAI (GPT-4o), Azure OpenAI, and Google Vertex AI. If you have an existing enterprise LLM contract with any of these, you can use it.</p></details>
+      <details><summary>What questionnaire formats are supported?</summary><p class="faq-answer">PDF, DOCX, CSV, and XLSX. The most common formats: CAIQ, SIG, Microsoft vendor security forms, and freeform DOCX tables.</p></details>
+      <details><summary>Is there a Chrome extension?</summary><p class="faq-answer">Yes. SecurityQFill will be available as both a web app and a Chrome extension. The extension adds one extra capability: if your questionnaire is a web form, you can fill it in-place directly from your browser without downloading or re-uploading anything.</p></details>
+      <details><summary>Can I retry if something goes wrong?</summary><p class="faq-answer">Yes. If processing fails for any reason, you get a full refund. No questions asked.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="bottom-cta">
+  <div class="container">
+    <div class="bottom-cta">
+      <h2>Get your weekend back.</h2>
+      <p>Join the early access list. We&#8217;ll email you the moment it launches &#8212; and you&#8217;ll get a discount on your first fill.</p>
+      <!-- SETUP: Same Formspree form ID as above -->
+      <form action="https://formspree.io/f/xykrjrva" method="POST">
+        <div class="form-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="you@yourcompany.com" required>
+          <button type="submit" class="btn-primary">Get early access</button>
+        </div>
+      </form>
+      <p class="cta-microcopy" style="margin-top:16px;">No credit card required. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Built for founders by a founder.</p>
+    <p>Questions? <a href="mailto:tyrelltle@gmail.com">tyrelltle@gmail.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

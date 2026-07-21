@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're in — SecurityQFill Early Access</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --surface: #161b22; --border: #30363d;
+      --accent: #3fb950; --accent-dim: #238636;
+      --text: #e6edf3; --text-muted: #8b949e; --text-subtle: #6e7681;
+      --radius: 8px;
+    }
+    html { font-size: 16px; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    .container { max-width: 600px; margin: 0 auto; padding: 0 24px; }
+
+    nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .nav-brand { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+
+    /* Confirmation */
+    .confirm { padding: 64px 0 48px; text-align: center; }
+    .check {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(63,185,80,0.12); border: 2px solid var(--accent-dim);
+      margin-bottom: 20px; font-size: 1.4rem;
+    }
+    .confirm h1 { font-size: clamp(1.6rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+    .confirm p { color: var(--text-muted); max-width: 440px; margin: 0 auto; }
+
+    /* Survey */
+    .survey { padding-bottom: 64px; }
+    .survey-header { margin-bottom: 32px; }
+    .survey-header h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+    .survey-header p { font-size: 0.9rem; color: var(--text-muted); }
+
+    .q { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+    .q-label { font-size: 0.75rem; font-weight: 600; color: var(--text-subtle); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .q-text { font-size: 1rem; font-weight: 600; margin-bottom: 16px; line-height: 1.4; }
+
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .opt {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: #0d1117; border: 1px solid var(--border); border-radius: 6px;
+      padding: 12px 14px; cursor: pointer; transition: border-color 0.15s;
+    }
+    .opt:hover { border-color: var(--accent-dim); }
+    .opt input[type="radio"] { margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; }
+    .opt span { font-size: 0.9rem; line-height: 1.4; }
+    .opt input[type="radio"]:checked + span { color: var(--accent); }
+
+    /* WTP open text */
+    .wtp-note { font-size: 0.8rem; color: var(--text-subtle); margin-top: 10px; }
+    input[type="text"], textarea {
+      width: 100%; background: #0d1117; border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text); font-size: 0.9rem;
+      padding: 10px 12px; margin-top: 8px; font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--accent-dim); }
+    textarea { resize: vertical; min-height: 72px; }
+
+    /* Submit */
+    .submit-wrap { margin-top: 24px; }
+    .btn-submit {
+      background: var(--accent); color: #0d1117; font-size: 1rem; font-weight: 700;
+      padding: 13px 28px; border: none; border-radius: var(--radius);
+      cursor: pointer; width: 100%; transition: background 0.15s;
+    }
+    .btn-submit:hover { background: #4ac95f; }
+    .skip { text-align: center; margin-top: 12px; }
+    .skip a { font-size: 0.82rem; color: var(--text-subtle); }
+
+    footer { border-top: 1px solid var(--border); padding: 24px 0; }
+    footer p { font-size: 0.85rem; color: var(--text-subtle); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="index.html" class="nav-brand">SecurityQFill</a>
+  </div>
+</nav>
+
+<div class="confirm">
+  <div class="container">
+    <div class="check">&#10003;</div>
+    <h1>You're on the list.</h1>
+    <p>We'll email you when SecurityQFill is ready. Three quick questions — your answers directly shape what we build first.</p>
+  </div>
+</div>
+
+<div class="survey">
+  <div class="container">
+
+    <!-- SETUP: Create a free Formspree form at formspree.io and replace YOUR_FORM_ID below -->
+    <form action="https://formspree.io/f/xykrjrva" method="POST">
+
+      <div class="survey-header">
+        <h2>Quick survey</h2>
+        <p>All questions are optional. Takes 60 seconds.</p>
+      </div>
+
+      <!-- Q1 -->
+      <div class="q">
+        <p class="q-label">Question 1 of 3</p>
+        <p class="q-text">Have you received a vendor security questionnaire in the last 6 months?</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="q1" value="yes_active">
+            <span>Yes — I'm still working on one right now</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q1" value="yes_done_manual">
+            <span>Yes — I filled it out manually (took hours)</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q1" value="yes_paid_someone">
+            <span>Yes — I paid someone else to fill it</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q1" value="expecting_soon">
+            <span>Not yet, but I'm expecting one soon</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q1" value="exploring">
+            <span>No, just exploring</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q">
+        <p class="q-label">Question 2 of 3</p>
+        <p class="q-text">How long did your last security questionnaire take to fill?</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="q2" value="under_2h">
+            <span>Under 2 hours</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q2" value="2_to_8h">
+            <span>2–8 hours</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q2" value="over_8h">
+            <span>More than 8 hours (or multiple days)</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q2" value="paid_consultant">
+            <span>I hired a consultant — not sure of their time</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q2" value="havent_filled">
+            <span>I haven't filled one yet</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q">
+        <p class="q-label">Question 3 of 3</p>
+        <p class="q-text">If SecurityQFill saved you 5+ hours on your next questionnaire, what would you expect to pay per use?</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="q3" value="under_25">
+            <span>Under $25</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q3" value="25_to_50">
+            <span>$25–$50</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q3" value="50_to_100">
+            <span>$50–$100</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q3" value="over_100">
+            <span>Over $100 — saving that much time is worth it</span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="q3" value="wouldnt_pay">
+            <span>I wouldn't pay — I'd do it manually</span>
+          </label>
+        </div>
+        <p class="wtp-note">Anything else you'd like us to know? (optional)</p>
+        <textarea name="q3_comments" placeholder="Open feedback..."></textarea>
+      </div>
+
+      <input type="hidden" name="_subject" value="SecurityQFill survey response">
+      <input type="hidden" name="_next" value="https://tyrelltle.github.io/securityqfill/thank-you.html">
+
+      <div class="submit-wrap">
+        <button type="submit" class="btn-submit">Submit — and I'm done</button>
+        <div class="skip"><a href="index.html">Skip survey</a></div>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>Questions? <a href="mailto:tyrelltle@gmail.com">tyrelltle@gmail.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
