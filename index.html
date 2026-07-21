@@ -226,6 +226,8 @@
     .comparison-row:last-child { border-bottom: none; }
     .comparison-row.highlight { background: var(--accent-soft); }
     .comparison-row .comp-option { flex: 1; font-weight: 600; color: var(--text); }
+    .comparison-row .comp-option small { display: block; font-weight: 400; font-size: 0.78rem; color: var(--text-subtle); margin-top: 2px; }
+    .comparison-row.highlight .comp-option small { color: var(--accent-dim); }
     .comparison-row .comp-cost { width: 120px; text-align: right; color: var(--text-muted); }
     .comparison-row .comp-time { width: 140px; text-align: right; color: var(--text-muted); }
     .comparison-row.highlight .comp-cost,
@@ -449,18 +451,18 @@
         <span class="comp-time">3&#8211;5 days</span>
       </div>
       <div class="comparison-row">
-        <span class="comp-option">Do it yourself</span>
+        <span class="comp-option">Do it yourself<small>Manual cross-referencing, no citations</small></span>
         <span class="comp-cost">$0</span>
-        <span class="comp-time">4&#8211;8 hours</span>
+        <span class="comp-time">~3 days</span>
       </div>
       <div class="comparison-row">
-        <span class="comp-option">Copy/paste into ChatGPT</span>
-        <span class="comp-cost">$0</span>
-        <span class="comp-time">2&#8211;4 hours, no citations</span>
+        <span class="comp-option">Copy/paste into ChatGPT<small>Pro plan required &middot; complex coordination &middot; no export</small></span>
+        <span class="comp-cost">$20+/mo</span>
+        <span class="comp-time">~1 day</span>
       </div>
       <div class="comparison-row highlight">
-        <span class="comp-option">SecurityQFill</span>
-        <span class="comp-cost">$49</span>
+        <span class="comp-option">SecurityQFill<small>Policy citations included &middot; exports in original format</small></span>
+        <span class="comp-cost">$49/fill</span>
         <span class="comp-time">Under 5 minutes</span>
       </div>
     </div>
