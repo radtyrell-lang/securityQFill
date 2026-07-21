@@ -334,6 +334,7 @@
 <section class="hero" id="top">
   <div class="container">
     <span class="hero-eyebrow">Early Access</span>
+    <p style="font-size:1.1rem;font-weight:700;color:var(--accent);letter-spacing:0.01em;margin-bottom:10px;">Fill with facts. Flag the rest.</p>
     <h1>Answer your enterprise security questionnaire with facts, not guesswork.</h1>
     <p class="sub-headline">SecurityQFill scans your GitHub and infrastructure to verify what your security posture actually is, then fills the questionnaire from those facts &#8212; with a source citation on every answer. <strong>It refuses to make up an answer it can&#8217;t back up.</strong> Built for pre-SOC2 B2B SaaS founders. No subscription.</p>
 
@@ -398,7 +399,7 @@
         </div>
       </div>
     </div>
-    <p class="flow-note">A Chrome extension for auto-filling web-based vendor portals is planned for a later version. For v1, the workflow is built around the emailed XLSX / DOCX / CSV attachment that pre-SOC2 founders actually receive.</p>
+    <p class="flow-note">This is the planned v1 workflow &#8212; we are currently validating demand before building it. A Chrome extension for auto-filling web-based vendor portals is planned for a later version. v1 focuses on the emailed XLSX / DOCX / CSV attachment that pre-SOC2 founders actually receive.</p>
   </div>
 </section>
 
@@ -516,7 +517,7 @@
       <details><summary>What does &#8220;grounded-only&#8221; mean?</summary><p class="faq-answer">We only answer questions backed by a verified fact &#8212; from your GitHub scan, your uploaded documents, or your own attestations. When there&#8217;s no source, we don&#8217;t generate anything. Instead we produce an honest, professionally worded gap response you can submit as-is. That refusal is the feature, not a limitation.</p></details>
       <details><summary>What if I don&#8217;t have a SOC 2 or a pen test?</summary><p class="faq-answer">That&#8217;s exactly who this product is for. Those questions become honest gap responses with specific next steps &#8212; for example, &#8220;We have not completed a SOC 2 audit; it&#8217;s on our roadmap as a Series A company.&#8221; Enterprise procurement handles honest gaps far better than fabricated controls that fall apart under a follow-up question.</p></details>
       <details><summary>How is this different from just using ChatGPT?</summary><p class="faq-answer">ChatGPT generates plausible-sounding answers with no source. In a security review, submitting a fabricated &#8220;yes&#8221; to a control you don&#8217;t have is a misrepresentation liability. SecurityQFill refuses to answer without a verified source, cites where each answer came from, and gives you honest gap responses everywhere else &#8212; plus a remediation report ChatGPT can&#8217;t produce.</p></details>
-      <details><summary>Is my source code safe?</summary><p class="faq-answer">Yes. The GitHub scan reads only specific named files &#8212; branch protection settings, CI workflow configs, dependency manifests, and Terraform / IaC files. Never a full clone, never arbitrary source. Every call goes directly from your browser to GitHub; your code and questionnaire documents never transit our servers.</p></details>
+      <details><summary>Is my source code safe?</summary><p class="faq-answer">Yes, by design. The planned GitHub scan reads only specific named files &#8212; branch protection settings, CI workflow configs, dependency manifests, and Terraform / IaC files. Never a full clone, never arbitrary source. All calls are designed to go directly from your browser to GitHub; your code and questionnaire documents are never routed through our servers. The exact list of files the scan can read will be shown to you before you authorize access.</p></details>
       <details><summary>What does the gap analysis include?</summary><p class="faq-answer">A list of every unanswered question paired with a specific remediation recommendation and a rough time and cost estimate &#8212; so before the deadline you know exactly what to work on, what&#8217;s a quick $0 fix, and what (like a pen test) simply can&#8217;t be done in time and should be disclosed honestly instead.</p></details>
       <details><summary>What&#8217;s my LLM cost?</summary><p class="faq-answer">Under $1.50 even on a 300-row questionnaire at premium model pricing &#8212; often a fraction of that on a lighter model. You bring your own key, so you pay your provider directly at cost. We never see your data, and we never mark up your inference.</p></details>
       <details><summary>What questionnaire and question formats are supported?</summary><p class="faq-answer">XLSX, CSV, and DOCX &#8212; the formats procurement actually emails, including SIG Lite, CAIQ, and freeform vendor forms. We fill answers back into the original file and preserve its formatting, and always confirm the column mapping with you before filling.</p></details>
