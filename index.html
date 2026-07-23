@@ -302,6 +302,44 @@
     footer a { color: var(--text-muted); }
     footer a:hover { color: var(--text); }
 
+    /* Survey form elements */
+    .survey-block { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-light); }
+    .survey-block legend { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 18px; display: block; }
+    .survey-question { margin-bottom: 20px; }
+    .survey-question label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .survey-question select,
+    .survey-question textarea {
+      width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius); color: var(--text); font-size: 0.92rem;
+      padding: 10px 14px; outline: none; transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    .survey-question select:focus,
+    .survey-question textarea:focus { border-color: var(--accent); }
+    .survey-question textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+    .check-group { display: flex; flex-direction: column; gap: 8px; }
+    .check-group label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.88rem; font-weight: 400; color: var(--text-muted);
+      cursor: pointer; padding: 8px 12px; border-radius: var(--radius);
+      border: 1px solid var(--border); background: var(--bg); transition: border-color 0.15s;
+    }
+    .check-group label:hover { border-color: var(--accent); }
+    .check-group input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* Product preview section */
+    .preview-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+    .preview-item { display: flex; flex-direction: column; gap: 12px; }
+    .preview-step-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-subtle);
+    }
+    .preview-step-label .step-chip {
+      background: var(--accent-soft); color: var(--accent);
+      padding: 2px 8px; border-radius: 100px; font-size: 0.7rem;
+    }
+
     /* Responsive */
     @media (max-width: 640px) {
       section { padding: 48px 0; }
@@ -319,6 +357,7 @@
       .comparison-row { flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 20px; }
       .comparison-row .comp-cost { width: auto; text-align: left; }
       .comparison-header { display: none; }
+      .preview-pair { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -339,9 +378,9 @@
     <p class="sub-headline">SecurityQFill scans your GitHub and infrastructure to verify what your security posture actually is, then fills the questionnaire from those facts &#8212; with a source citation on every answer. <strong>It refuses to make up an answer it can&#8217;t back up.</strong> Built for pre-SOC2 B2B SaaS founders. No subscription.</p>
 
     <div class="screenshot-wrap">
-      <p class="screenshot-label">Grounded answers with source citations</p>
-      <img class="screenshot-img" src="poc-results.png" alt="SecurityQFill results table: security questionnaire rows filled with grounded answers, source citations, and confidence badges">
-      <p class="screenshot-caption">Demo mode: 8 questions with direct policy matches. Real questionnaires typically include questions the product flags as honest gaps &#8212; that&#8217;s the product working correctly, not failing.</p>
+      <p class="screenshot-label">Real pre-MVP output &#8212; CAIQ v4.0 Lite filled from a live GitHub repo scan</p>
+      <img class="screenshot-img" src="screenshot_result.png" alt="SecurityQFill results screen: dark interface showing CAIQ questionnaire filled with domain sections, grounded answers, green confidence badges, and a Download CSV button">
+      <p class="screenshot-caption">Green badges = answer grounded in a verified source. Amber = partial evidence. Manual gaps flagged honestly with a next-step recommendation &#8212; never fabricated.</p>
     </div>
 
     <div class="pain-block">
@@ -359,8 +398,82 @@
           <input type="email" name="email" placeholder="you@yourcompany.com" required>
           <button type="submit" class="btn-primary">Get early access</button>
         </div>
+        <div class="survey-block">
+          <legend>Help us understand your situation (2 min &#8212; optional, but shapes what we build)</legend>
+
+          <div class="survey-question">
+            <label for="q_time">How long does filling out a security questionnaire typically take you?</label>
+            <select id="q_time" name="time_to_fill">
+              <option value="">Select one&hellip;</option>
+              <option value="under_2h">Under 2 hours</option>
+              <option value="2_8h">2&#8211;8 hours (half to a full day)</option>
+              <option value="8_plus">More than 8 hours (spread across days)</option>
+              <option value="havent">I haven&#8217;t filled one yet but expect to</option>
+            </select>
+          </div>
+
+          <div class="survey-question">
+            <label>Which parts are most painful? (check all that apply)</label>
+            <div class="check-group">
+              <label><input type="checkbox" name="pain[]" value="finding_answers"> Finding the right answers across docs and code</label>
+              <label><input type="checkbox" name="pain[]" value="cross_referencing"> Cross-referencing policies, configs, and controls</label>
+              <label><input type="checkbox" name="pain[]" value="honest_gaps"> Writing honest gap responses that don&#8217;t kill the deal</label>
+              <label><input type="checkbox" name="pain[]" value="formatting"> Reformatting answers to match their template</label>
+              <label><input type="checkbox" name="pain[]" value="all"> All of the above &#8212; the whole thing is painful</label>
+            </div>
+          </div>
+
+          <div class="survey-question">
+            <label for="q_formats">What questionnaire formats do you receive?</label>
+            <select id="q_formats" name="formats">
+              <option value="">Select one&hellip;</option>
+              <option value="caiq">CAIQ (CSA Cloud Security Alliance)</option>
+              <option value="sig">SIG / SIG Lite</option>
+              <option value="custom_xlsx">Custom XLSX / Word doc the vendor sends</option>
+              <option value="web_portal">Web-based vendor portal (Coupa, Ariba, etc.)</option>
+              <option value="mixed">Mix of all of the above</option>
+              <option value="unsure">Not sure &#8212; they vary</option>
+            </select>
+          </div>
+
+          <div class="survey-question">
+            <label for="q_tools">What do you use today to fill them?</label>
+            <select id="q_tools" name="tools_today">
+              <option value="">Select one&hellip;</option>
+              <option value="manual">Manually &#8212; reading docs and filling by hand</option>
+              <option value="chatgpt">Copy-paste into ChatGPT and edit</option>
+              <option value="platform">Compliance platform (Vanta, SafeBase, Drata&hellip;)</option>
+              <option value="contractor">Consultant or contractor</option>
+              <option value="nothing_yet">Nothing yet &#8212; first one is coming</option>
+            </select>
+          </div>
+
+          <div class="survey-question">
+            <label for="q_anything">What would you most want automated? (optional free text)</label>
+            <textarea id="q_anything" name="most_want_automated" placeholder="E.g. finding which of our GitHub configs actually answers the question, or generating honest gap responses I can send without embarrassment&hellip;"></textarea>
+          </div>
+        </div>
       </form>
       <p class="cta-microcopy">We&#8217;re validating before we build. Sign up and we&#8217;ll email you when it&#8217;s ready &#8212; early access members get a discount on their first fill. No credit card required.</p>
+    </div>
+  </div>
+</section>
+
+<section id="product-preview">
+  <div class="container">
+    <h2>See the product</h2>
+    <p class="section-sub">Two screens from the working pre-MVP. Connect your repo, scan in under 30 seconds, then review grounded answers with source citations.</p>
+    <div class="preview-pair">
+      <div class="preview-item">
+        <div class="preview-step-label"><span class="step-chip">Step 1</span> Connect &amp; scan your repo</div>
+        <img class="screenshot-img" src="screenshot_landing.png" alt="SecurityQFill connect screen: dark interface with step indicator, fields for Anthropic API key, GitHub repo URL, and personal access token">
+        <p class="screenshot-caption" style="text-align:left;">Read-only GitHub scan. Your PAT stays in your browser &#8212; it never touches our servers.</p>
+      </div>
+      <div class="preview-item">
+        <div class="preview-step-label"><span class="step-chip">Step 4</span> Review grounded results</div>
+        <img class="screenshot-img" src="screenshot_result.png" alt="SecurityQFill results screen: CAIQ questionnaire filled with domain sections, confidence badges, grounded answers">
+        <p class="screenshot-caption" style="text-align:left;">Every answer cites its source. Gaps get an honest response and a remediation step.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -531,7 +644,7 @@
 <section id="bottom-cta">
   <div class="container">
     <div class="bottom-cta">
-      <h2>Answer honestly. Win the deal anyway.</h2>
+      <h2>Stop guessing. Start grounding.</h2>
       <p>Join the early access list. We&#8217;ll email you the moment it launches &#8212; and you&#8217;ll get a discount on your first fill.</p>
       <form action="https://formspree.io/f/xykrjrva" method="POST">
         <div class="form-row" style="justify-content:center;">
