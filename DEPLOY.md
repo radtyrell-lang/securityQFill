@@ -113,7 +113,7 @@ Once you know your final URL (GitHub subdomain or custom domain), go back to you
 3. Confirm you are redirected to `thank-you.html`
 4. Confirm the survey loads on the thank-you page
 5. Confirm a test response appears in your Tally dashboard
-6. If using Formspree, confirm the email notification arrives at tyrelltle@gmail.com
+6. If using Formspree, confirm the email notification arrives at radtyrell@gmail.com
 
 Only post in communities (Hacker News, Indie Hackers, etc.) after confirming the end-to-end flow works.
 
@@ -150,4 +150,4 @@ Update `.quote-text` and `.quote-attr` with the real name and quote, then push.
 
 ## Support
 
-Questions about this setup? tyrelltle@gmail.com
+Questions about this setup? radtyrell@gmail.com
