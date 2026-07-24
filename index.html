@@ -327,18 +327,33 @@
     .check-group label:hover { border-color: var(--accent); }
     .check-group input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; flex-shrink: 0; }
 
-    /* Product preview section */
-    .preview-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
-    .preview-item { display: flex; flex-direction: column; gap: 12px; }
-    .preview-step-label {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--text-subtle);
+    /* Mini flow */
+    .mini-flow {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+      margin: 28px 0 32px;
     }
-    .preview-step-label .step-chip {
-      background: var(--accent-soft); color: var(--accent);
-      padding: 2px 8px; border-radius: 100px; font-size: 0.7rem;
+    .mini-step {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 8px 14px;
+      font-size: 0.82rem; font-weight: 600; color: var(--text);
+      white-space: nowrap;
     }
+    .mini-arrow { color: var(--accent); font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+
+    /* Personality line */
+    .personality-line {
+      font-size: 1rem; font-weight: 600; color: var(--accent);
+      margin-bottom: 18px; margin-top: -6px;
+    }
+
+    /* Social proof strip */
+    .social-strip {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 20px;
+      background: var(--accent-soft); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 18px 28px; text-align: center;
+    }
+    .social-item { font-size: 0.88rem; font-weight: 600; color: var(--accent); }
+    .social-sep { color: var(--text-light); }
 
     /* Responsive */
     @media (max-width: 640px) {
@@ -366,37 +381,89 @@
 <nav>
   <div class="container">
     <span class="nav-brand">SecurityQFill</span>
-    <a class="nav-cta" href="#early-access">Get early access</a>
+    <a class="nav-cta" href="#early-access">Reserve my spot</a>
   </div>
 </nav>
 
 <section class="hero" id="top">
   <div class="container">
     <span class="hero-eyebrow">Early Access</span>
-    <p style="font-size:1.1rem;font-weight:700;color:var(--accent);letter-spacing:0.01em;margin-bottom:10px;">Fill with facts. Flag the rest.</p>
-    <h1>Answer your enterprise security questionnaire with facts, not guesswork.</h1>
-    <p class="sub-headline">SecurityQFill scans your GitHub and infrastructure to verify what your security posture actually is, then fills the questionnaire from those facts &#8212; with a source citation on every answer. <strong>It refuses to make up an answer it can&#8217;t back up.</strong> Built for pre-SOC2 B2B SaaS founders. No subscription.</p>
+    <h1>Security questionnaires shouldn&#8217;t take your entire week.</h1>
+    <p class="personality-line">We don&#8217;t let AI hallucinate your SOC&nbsp;2 controls.</p>
+    <p class="sub-headline">SecurityQFill scans your GitHub repo and infrastructure, then fills the questionnaire from what it actually finds &#8212; a source citation on every answer. <strong>If it can&#8217;t prove it, it won&#8217;t answer it.</strong></p>
 
-    <div class="screenshot-wrap">
-      <p class="screenshot-label">Real pre-MVP output &#8212; CAIQ v4.0 Lite filled from a live GitHub repo scan</p>
-      <img class="screenshot-img" src="screenshot_result.png" alt="SecurityQFill results screen: dark interface showing CAIQ questionnaire filled with domain sections, grounded answers, green confidence badges, and a Download CSV button">
-      <p class="screenshot-caption">Green badges = answer grounded in a verified source. Amber = partial evidence. Manual gaps flagged honestly with a next-step recommendation &#8212; never fabricated.</p>
+    <div class="mini-flow">
+      <div class="mini-step">Upload questionnaire</div>
+      <div class="mini-arrow">&#8594;</div>
+      <div class="mini-step">Scan your evidence</div>
+      <div class="mini-arrow">&#8594;</div>
+      <div class="mini-step">Draft answers</div>
+      <div class="mini-arrow">&#8594;</div>
+      <div class="mini-step">Flag gaps honestly</div>
+      <div class="mini-arrow">&#8594;</div>
+      <div class="mini-step">Export</div>
     </div>
 
-    <div class="pain-block">
-      <p><strong>A security questionnaire is a trust document, and a wrong answer is a liability.</strong> Most pre-SOC2 founders answer them one of two bad ways: burn a weekend cross-referencing policy docs by hand, or paste the questions into ChatGPT and ship whatever confident-sounding &#8220;yes&#8221; it invents. That second path is worse than slow &#8212; a fabricated &#8220;yes&#8221; to a control you don&#8217;t have is a misrepresentation to enterprise procurement. SecurityQFill exists so you can answer honestly, quickly, and from evidence.</p>
+    <div class="screenshot-wrap">
+      <img class="screenshot-img" src="screenshot_result.png" alt="SecurityQFill results screen: dark interface showing CAIQ questionnaire filled with domain sections, grounded answers, green confidence badges, and a Download CSV button">
+      <p class="screenshot-caption">Real pre-MVP output &#8212; CAIQ v4.0 Lite filled from a live GitHub repo scan. Green = verified source. Amber = partial evidence. Gaps flagged honestly, never fabricated.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <h2>Before you scroll, here&#8217;s the math.</h2>
+    <p class="section-sub">One flat fee per questionnaire. No subscription, no seats, no storage.</p>
+    <div class="comparison-table">
+      <div class="comparison-header">
+        <span>How people handle it</span><span>Cost</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Do it yourself<small>~3 days of manual cross-referencing &#183; no citations &#183; risk of misrepresentation</small></span>
+        <span class="comp-cost">$0 + 3 days</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Paste into ChatGPT<small>~1 day &#183; fabricates answers with no source &#183; no gap analysis &#183; Pro plan required</small></span>
+        <span class="comp-cost">$20+/mo</span>
+      </div>
+      <div class="comparison-row">
+        <span class="comp-option">Vanta / SafeBase / compliance platform<small>Full compliance platform &#183; annual contract &#183; overkill before you need SOC&nbsp;2</small></span>
+        <span class="comp-cost">$10K&#8211;42K/yr</span>
+      </div>
+      <div class="comparison-row highlight">
+        <span class="comp-option">SecurityQFill<small>Grounded-only &#183; gap analysis included &#183; BYOK &#183; your data never leaves your control</small></span>
+        <span class="comp-cost">$49/fill</span>
+      </div>
+    </div>
+    <div class="pricing-hero" style="margin-top:32px;margin-bottom:0;">
+      <div class="price">$49<span>/fill</span></div>
+      <p class="price-tag">Full refund if processing fails.</p>
+      <div class="price-guarantee">&#10003; No credit card to join the list</div>
+    </div>
+  </div>
+</section>
+
+<section id="social-proof">
+  <div class="container">
+    <div class="social-strip">
+      <span class="social-item">&#128269; Pre-MVP live and tested</span>
+      <span class="social-sep">&#183;</span>
+      <span class="social-item">Looking for 25 design partners</span>
+      <span class="social-sep">&#183;</span>
+      <span class="social-item">Design partners get a discount on their first fill</span>
     </div>
   </div>
 </section>
 
 <section id="early-access">
   <div class="container">
-    <p class="cta-label">Join the early access list</p>
+    <p class="cta-label">Reserve your spot &#8212; design partner access is limited</p>
     <div class="cta-form-wrap">
       <form action="https://formspree.io/f/mykrdlvr" method="POST">
         <div class="form-row">
           <input type="email" name="email" placeholder="you@yourcompany.com" required>
-          <button type="submit" class="btn-primary">Get early access</button>
+          <button type="submit" class="btn-primary">Reserve my spot</button>
         </div>
         <div class="survey-block">
           <legend>Help us understand your situation (2 min &#8212; optional, but shapes what we build)</legend>
@@ -454,7 +521,7 @@
           </div>
         </div>
       </form>
-      <p class="cta-microcopy">We&#8217;re validating before we build. Sign up and we&#8217;ll email you when it&#8217;s ready &#8212; early access members get a discount on their first fill. No credit card required.</p>
+      <p class="cta-microcopy">Validating before we build. Design partners help shape the product and get a discount on their first fill. No credit card required.</p>
     </div>
   </div>
 </section>
@@ -510,38 +577,6 @@
   </div>
 </section>
 
-<section id="pricing">
-  <div class="container">
-    <div class="pricing-hero">
-      <div class="price">$49<span>/fill</span></div>
-      <p class="price-tag">One flat fee per questionnaire. No subscription. No seats. No storage.</p>
-      <div class="price-guarantee">&#10003; Full refund if processing fails</div>
-    </div>
-    <p class="section-sub" style="text-align:center; margin: 0 auto 32px;">Every fill includes the GitHub + IaC scan, a source citation on every grounded answer, the honest gap responses, and the gap-analysis remediation report. Pay only when you have a questionnaire to fill.</p>
-    <div class="comparison-table">
-      <div class="comparison-header">
-        <span>How founders handle it</span><span>Cost</span>
-      </div>
-      <div class="comparison-row">
-        <span class="comp-option">Do it yourself<small>~3 days of manual cross-referencing &#183; no citations &#183; risk of misrepresentation</small></span>
-        <span class="comp-cost">$0 + 3 days</span>
-      </div>
-      <div class="comparison-row">
-        <span class="comp-option">Paste into ChatGPT<small>~1 day &#183; fabricates answers with no source &#183; no gap analysis &#183; Pro plan required</small></span>
-        <span class="comp-cost">$20+/mo</span>
-      </div>
-      <div class="comparison-row">
-        <span class="comp-option">Vanta / SafeBase / compliance platform<small>Full compliance platform &#183; annual contract &#183; overkill before you need SOC 2</small></span>
-        <span class="comp-cost">$10K&#8211;42K/yr</span>
-      </div>
-      <div class="comparison-row highlight">
-        <span class="comp-option">SecurityQFill<small>Grounded-only &#183; gap analysis included &#183; BYOK, your data never leaves your control</small></span>
-        <span class="comp-cost">$49/fill</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="privacy">
   <div class="container">
     <div class="trust-box">
@@ -577,11 +612,11 @@
   <div class="container">
     <div class="bottom-cta">
       <h2>Stop guessing. Start grounding.</h2>
-      <p>Join the early access list. We&#8217;ll email you the moment it launches &#8212; and you&#8217;ll get a discount on your first fill.</p>
+      <p>Reserve your spot as a design partner. You&#8217;ll help shape the product &#8212; and get a discount on your first fill when it launches.</p>
       <form action="https://formspree.io/f/mykrdlvr" method="POST">
         <div class="form-row" style="justify-content:center;">
           <input type="email" name="email" placeholder="you@yourcompany.com" required>
-          <button type="submit" class="btn-primary">Get early access</button>
+          <button type="submit" class="btn-primary">Reserve my spot</button>
         </div>
       </form>
       <p class="cta-microcopy" style="margin-top:16px;">No credit card required. Unsubscribe anytime.</p>
