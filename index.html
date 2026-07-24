@@ -459,63 +459,6 @@
   </div>
 </section>
 
-<section id="product-preview">
-  <div class="container">
-    <h2>See the product</h2>
-    <p class="section-sub">Two screens from the working pre-MVP. Connect your repo, scan in under 30 seconds, then review grounded answers with source citations.</p>
-    <div class="preview-pair">
-      <div class="preview-item">
-        <div class="preview-step-label"><span class="step-chip">Step 1</span> Connect &amp; scan your repo</div>
-        <img class="screenshot-img" src="screenshot_landing.png" alt="SecurityQFill connect screen: dark interface with step indicator, fields for Anthropic API key, GitHub repo URL, and personal access token">
-        <p class="screenshot-caption" style="text-align:left;">Read-only GitHub scan. Your PAT stays in your browser &#8212; it never touches our servers.</p>
-      </div>
-      <div class="preview-item">
-        <div class="preview-step-label"><span class="step-chip">Step 4</span> Review grounded results</div>
-        <img class="screenshot-img" src="screenshot_result.png" alt="SecurityQFill results screen: CAIQ questionnaire filled with domain sections, confidence badges, grounded answers">
-        <p class="screenshot-caption" style="text-align:left;">Every answer cites its source. Gaps get an honest response and a remediation step.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="how-it-works">
-  <div class="container">
-    <h2>How it works</h2>
-    <p class="section-sub">Four steps from an emailed questionnaire to a credible, evidence-backed response.</p>
-    <div class="flow">
-      <div class="flow-step">
-        <div class="flow-num">1</div>
-        <div class="flow-body">
-          <h3>Connect GitHub (read-only)</h3>
-          <p>An automated scan reads only specific named files &#8212; <span class="hl">branch protection rules, CI workflow configs (Dependabot, Snyk, CodeQL), dependency manifests, and Terraform / infrastructure-as-code</span> &#8212; and turns them into verified facts before you type anything. It proves what&#8217;s actually configured: encryption at rest, enforced code review, dependency scanning, audit logging.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num">2</div>
-        <div class="flow-body">
-          <h3>Review and attest</h3>
-          <p>You get a pre-filled checklist of your posture instead of a blank page. Confirm what the scan found and fill the handful of gaps only you can answer &#8212; MFA enforcement, SOC 2 status, pen test history &#8212; and attach evidence like an Okta MFA screenshot. About <span class="hl">10&#8211;15 minutes</span>.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num">3</div>
-        <div class="flow-body">
-          <h3>Upload the questionnaire</h3>
-          <p>Drop in the XLSX, CSV, or DOCX procurement emailed you. SecurityQFill parses it and shows you the detected question and answer columns to <span class="hl">confirm the mapping</span> before anything is filled &#8212; so answers never land in the wrong cells.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num">4</div>
-        <div class="flow-body">
-          <h3>Fill from verified facts, then download</h3>
-          <p>Answers are generated <span class="hl">only from your verified facts</span>, each with a source citation. Where no fact exists, you get an honest gap response &#8212; never a fabrication. Download the filled questionnaire in its original format, plus a gap-analysis report telling you exactly what to fix next.</p>
-        </div>
-      </div>
-    </div>
-    <p class="flow-note">This is the planned v1 workflow &#8212; we are currently validating demand before building it. A Chrome extension for auto-filling web-based vendor portals is planned for a later version. v1 focuses on the emailed XLSX / DOCX / CSV attachment that pre-SOC2 founders actually receive.</p>
-  </div>
-</section>
-
 <section id="grounded">
   <div class="container">
     <h2>It refuses to make up answers</h2>
@@ -608,17 +551,6 @@
         <p>Both your LLM key and your GitHub connection are held in your browser for the session only. Questionnaire parsing, answer generation, and the GitHub scan all run client-side &#8212; your files go directly to your own LLM provider and GitHub, never through us.</p>
         <p>The GitHub scan is a deliberate, inspectable allowlist of file paths &#8212; branch protection settings, named workflow files, dependency manifests, and IaC configs &#8212; never a full repository clone. You can see exactly which files were read.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<section id="founder">
-  <div class="container">
-    <div class="founder-section">
-      <p>I&#8217;m a software engineer with 10+ years in the industry. Over the years I kept running into the same thing: an enterprise deal getting close, then a security questionnaire landing in my inbox. Days of work &#8212; cross-referencing docs, hunting through Terraform configs, writing gap responses that were honest without tanking the deal, then reformatting everything to fit someone else&#8217;s spreadsheet.</p>
-      <p>I built SecurityQFill because I wanted a tool that would do that mechanical work for me &#8212; scan what&#8217;s actually configured in the repo, answer from evidence rather than guesswork, and flag the honest gaps with a clear next step. Not just for me: for anyone who has had to stop building for a week to fill out a questionnaire they&#8217;re not sure they&#8217;re answering accurately.</p>
-      <p>This is a one-person project. No team, no VC, just someone trying to solve a problem that cost me real time and real stress. If it costs you the same, I&#8217;d genuinely like to hear about it.</p>
-      <p><a href="mailto:radtyrell@gmail.com">radtyrell@gmail.com</a></p>
     </div>
   </div>
 </section>
